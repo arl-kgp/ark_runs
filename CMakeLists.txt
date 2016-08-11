@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   mavros_msgs
   ark_msgs
+  tf
 )
 
 
@@ -152,3 +153,6 @@ include_directories(
 
 add_executable(alt_hold src/alt_hold.cpp)
 target_link_libraries(alt_hold ${catkin_LIBRARIES})
+
+add_executable(position_hold src/position_hold.cpp)
+target_link_libraries(position_hold ${catkin_LIBRARIES})
