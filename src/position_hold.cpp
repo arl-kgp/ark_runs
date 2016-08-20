@@ -43,8 +43,11 @@ private:
 
         ark_msgs::PidErrors pid_error;
         pid_error.dx = diff_x;
-        pid_error.dy = 0;
+        pid_error.dy = diff_y;
         pid_error.dz = 0;
+        pid_error.vx = - msg->twist.twist.linear.x;
+        pid_error.vy = - msg->twist.twist.linear.y;
+        pid_error.vz = - msg->twist.twist.linear.z;
         pid_pub.publish(pid_error);
 
         ROS_INFO("%.2f, %.2f, %.2f", diff_x, diff_y, diff_z);
@@ -82,7 +85,7 @@ int main(int argc, char** argv)
     }
 
     PosHold ah;
-    ah.set_target(-1.9, 0.0, 0.0);
+    ah.set_target(0.0, 0.0, 0.0);
     ros::spin();
     return 0;
 }
