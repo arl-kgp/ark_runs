@@ -16,11 +16,11 @@ public:
     AltHold()
     {
         pid_pub = nh_.advertise<ark_msgs::PidErrors>("/ark/pid_errors", 1000);
-        alt_sub = nh_.subscribe("/odometry/filtered", 1000, &AltHold::altCb, this);
+        alt_sub = nh_.subscribe("/odometry", 1000, &AltHold::altCb, this);
         target_height = 0;
         target_yaw = 0;
         initial_yaw = 0;
-        ran_before  = false;  
+        ran_before  = false;
     }
 
     ~AltHold()
@@ -91,7 +91,7 @@ private:
         myq.x = msg->pose.pose.orientation.x;
         myq.y = msg->pose.pose.orientation.y;
         myq.z = msg->pose.pose.orientation.z;
-        myq.w = msg->pose.pose.orientation.w;  
+        myq.w = msg->pose.pose.orientation.w;
         GetEulerAngles(myq, yaw, pitch, roll);
         pid_error.dz = alt_diff;
 
