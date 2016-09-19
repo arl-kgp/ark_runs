@@ -6,15 +6,13 @@
 #include <eigen3/Eigen/Geometry>
 
 
-class PosHold
-{
+class PosHold {
     ros::NodeHandle nh_;
     ros::Publisher pid_pub;
     ros::Subscriber odom_sub;
 
-public:
-    PosHold()
-    {
+ public:
+    PosHold() {
         pid_pub = nh_.advertise<ark_msgs::PidErrors>("/ark/pid_errors", 1000);
         odom_sub = nh_.subscribe("/odometry/filtered", 10, &PosHold::odomCb, this);
         target_x = 0; target_y = 0; target_z = 0; target_psi = 0;
@@ -146,7 +144,7 @@ int main(int argc, char** argv)
     }
 
     PosHold ah;
-    ah.set_target(0.0, 0.0, 1.7, 0.0);
+    ah.set_target(0.0, 0.0, 2, 0.0);
     ros::spin();
     return 0;
 }
