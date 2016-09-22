@@ -10,11 +10,13 @@ class PosHold {
     ros::NodeHandle nh_;
     ros::Publisher pid_pub;
     ros::Subscriber odom_sub;
+    ros::Subscriber setpoint_sub;
 
  public:
     PosHold() {
         pid_pub = nh_.advertise<ark_msgs::PidErrors>("/ark/pid_errors", 1000);
         odom_sub = nh_.subscribe("/odometry/filtered", 10, &PosHold::odomCb, this);
+        setpoint_sub = nh_.subscribe("/ark/setpoint", 10, &PosHold::setpointCb, this);
         target_x = 0; target_y = 0; target_z = 0; target_psi = 0;
         initial_psi = 0;
         ran_before  = false;   
@@ -110,7 +112,17 @@ private:
         pid_pub.publish(pid_error);
 
         ROS_INFO("%.2f, %.2f, %.2f, %.2f", diff_x, diff_y, diff_z, diff_psi);
-    }   
+    }
+
+    void setpointCb(const ark_msgs::PidErrorsConstPtr& msg)
+    {
+        target_x = msg->dx;
+        target_y = msg->dy;
+        target_z = msg->dz;
+        target_psi = msg->dpsi;
+        ran_before = false;
+        ROS_INFO("Setpoint changed to %.2f, %.2f, %.2f, %.2f", target_x, target_y, target_z, target_psi);
+    }
 };
 
 int main(int argc, char** argv)
